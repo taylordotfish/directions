@@ -20,21 +20,19 @@ TIME_SPEEDUP = 1
 
 HOST = "0.0.0.0"
 REFERENCE_GRAVITY = Vector(0, 0, 1)
-log_file = sys.stderr
+_log_file = sys.stderr
 
 
 def set_log_file(file):
-    global log_file
-    log_file = file or sys.stderr
+    global _log_file
+    _log_file = file or sys.stderr
 
 
 def log(*args, **kwargs):
-    kwargs["file"] = log_file
     kwargs.setdefault("flush", True)
-    print(*args, **kwargs)
+    print(*args, **kwargs, file=_log_file)
     if DEBUG:
-        kwargs["file"] = sys.stderr
-        print(*args, **kwargs)
+        print(*args, **kwargs, file=sys.stderr)
 
 
 class SensorServer:
@@ -162,15 +160,15 @@ ACTION_MESSAGES = {
         ("Turn around.", 1),
         ("Make a u-turn.", 2),
         ("Make a v-turn.", 0.2),
-        ("You're going the wrong way. Turn around.", 0.5),
+        ("You’re going the wrong way. Turn around.", 0.5),
         ("Drive in the opposite direction.", 0.5),
     ],
     Action.forward: [
         ("Continue straight.", 1),
         ("Keep driving.", 1),
-        ("You're on your way.", 0.35),
+        ("You’re on your way.", 0.35),
         ("Your destination is somewhere.", 0.1),
-        ("I'm lost, but just keep going.", 0.1),
+        ("I’m lost, but just keep going.", 0.1),
         ("Do not turn left.", 0.08),
         ("Do not turn right.", 0.08),
         ("Turn around 180 degrees, put the car in reverse, "
@@ -299,31 +297,46 @@ class Navigator:
             self.resume_directions.set()
 
     async def do_highway(self):
-        self.emit("Highway mode started. Type exit when you exit.")
-        duration = random.uniform(*HIGHWAY_DURATION_RANGE)
-        sleep_task = asyncio.create_task(asyncio.sleep(duration))
+        self.emit("Highway mode started. Type “exit” when you exit, ", end="")
+        self.emit("or “new” if you merge onto a new highway.")
+        self.emit("Press enter for an immediate direction.")
+        exit = False
 
         async def interactive_loop():
+            nonlocal exit
+
+            def cancel():
+                if not sleep_task.done():
+                    sleep_task.cancel()
+
             while True:
                 cmd = await ainput()
                 if not cmd:
                     self.emit_immediate_action()
                     continue
+                if cmd == "new":
+                    cancel()
+                    break
                 if cmd == "exit":
-                    if not sleep_task.done():
-                        sleep_task.cancel()
+                    cancel()
+                    exit = True
                     break
                 print("Unknown command.", file=sys.stderr)
 
-        interactive_loop_task = asyncio.create_task(interactive_loop())
-        try:
-            await sleep_task
-        except asyncio.CancelledError:
-            pass
-        else:
+        while not exit:
+            duration = random.uniform(*HIGHWAY_DURATION_RANGE)
+            sleep_task = asyncio.create_task(asyncio.sleep(duration))
+            interactive_loop_task = asyncio.create_task(interactive_loop())
+            try:
+                await sleep_task
+            except asyncio.CancelledError:
+                continue
             self.emit("Exit the highway. Type exit when you exit.")
+            exit = True
+
         await interactive_loop_task
         self.emit("Highway mode stopped.")
+        self.change_target_direction()
 
     def emit_immediate_action(self):
         action = self.choose_next_action(IMMEDIATE_ACTIONS)
@@ -349,10 +362,9 @@ class Navigator:
         )
 
     def emit_start(self):
-        self.emit("Start driving.")
-        self.emit(
-            "Press enter at any time if you need an immediate direction.",
-        )
+        self.emit("Start driving. Press enter at any time ", end="")
+        self.emit("if you need an immediate direction.")
+        self.emit("Type “highway” to start highway mode.")
 
     def emit_action(self, action):
         messages = ACTION_MESSAGES[action]
@@ -360,9 +372,9 @@ class Navigator:
         weights = [m[1] for m in messages]
         self.emit(random.choices(strings, weights)[0])
 
-    def emit(self, message):
-        print(message, file=sys.stderr)
-        print(message)
+    def emit(self, message, end="\n"):
+        print(message, file=sys.stderr, end=end)
+        print(message, end=end)
 
 
 def run():
