@@ -32,6 +32,7 @@ On the navigator device:
 * Python ≥ 3.5
 * Python package: `aioconsole`
 * Python package: `math3d`
+* Python package: `numpy`
 
 On the local IP storage server:
 
