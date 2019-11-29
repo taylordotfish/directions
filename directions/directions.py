@@ -305,6 +305,9 @@ class Navigator:
         async def interactive_loop():
             while True:
                 cmd = await ainput()
+                if not cmd:
+                    self.emit_immediate_action()
+                    continue
                 if cmd == "exit":
                     if not sleep_task.done():
                         sleep_task.cancel()
