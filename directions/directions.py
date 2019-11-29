@@ -186,6 +186,7 @@ ACTION_INITIAL_DELAY_RANGE = (5, 10)
 POLL_INTERVAL = 1
 POLL_QUALITY_OFFSET = -0.5
 POLL_QUALITY_DIVISOR = 22
+POLL_MAX_SCORE = 1
 INITIAL_DELAY_RANGE = (10, 30)
 HIGHWAY_DURATION_RANGE = (200, 600)
 
@@ -280,7 +281,7 @@ class Navigator:
                 (self.quality() + POLL_QUALITY_OFFSET) / POLL_QUALITY_DIVISOR
             )
             score += score_delta
-            score = min(score, 1)
+            score = min(score, POLL_MAX_SCORE)
 
     def cancel_next_action(self):
         if not self.next_action_task:
