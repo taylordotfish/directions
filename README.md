@@ -87,3 +87,10 @@ Running
 Note that various scripts create a `.cache` directory in the root of this
 repository and write files into it. This directory may be deleted, although it
 is best to do so when none of these programs are running.
+
+
+License
+-------
+
+This repository is licensed under version 3 or later of the GNU Affero General
+Public License. See `LICENSE`.
