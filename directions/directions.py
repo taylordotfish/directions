@@ -72,15 +72,16 @@ class SensorServer:
                 chunk = await reader.readuntil(b"\n}\n")
             except asyncio.streams.IncompleteReadError:
                 break
-            self.process_data(json.loads(chunk))
-            self.ready.set()
+            if self.process_data(json.loads(chunk)):
+                self.ready.set()
         self.done.set()
 
     def process_data(self, data):
         gravity = self.get_gravity(data)
         magnetism = self.get_magnetism(data)
         if not (gravity and magnetism):
-            return
+            log("Warning: Did not receive gravity and magnetism data")
+            return False
 
         gravity.normalize()
         orientation = Orientation.new_vec_to_vec(gravity, REFERENCE_GRAVITY)
@@ -89,9 +90,10 @@ class SensorServer:
         magnetism.z = 0
         if magnetism.length == 0:
             log("Warning: Zero-length fixed magnetism")
-            return
+            return False
         magnetism.normalize()
         self._direction = magnetism
+        return True
 
     def get_gravity(self, data):
         try:
