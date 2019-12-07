@@ -12,7 +12,7 @@ def main():
         directions.set_log_file(f)
         try:
             directions.run()
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, EOFError):
             sys.exit(0)
         except Exception:
             log(traceback.format_exc())
