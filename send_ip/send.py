@@ -1,9 +1,12 @@
 from .config import HOST, SET_URL
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+import os
 import socket
 import sys
 import time
+
+DEBUG = bool(os.environ.get("DEBUG"))
 
 
 def get_ip():
@@ -24,11 +27,15 @@ def send_ip(ip):
 
 
 def run():
+    print("Started", file=sys.stderr)
+    any_success = False
     while True:
         try:
             response = send_ip(get_ip())
         except OSError as e:
             print("%s: %s" % (type(e).__name__, e), file=sys.stderr)
         else:
-            print("Response: %s" % response)
+            if DEBUG or not any_success:
+                print("Response: %s" % response, file=sys.stderr)
+            any_success = True
         time.sleep(15)
