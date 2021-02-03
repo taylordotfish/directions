@@ -27,21 +27,28 @@ All programs must be run in a Unix-like environment.
 
 On the sensor client device (Android), in Termux:
 
-* Python ≥ 3.5
-* Python package: `aiohttp`
+* Python ≥ 3.7
+* Python package: [aiohttp]
 
 On the navigator device:
 
 * espeak-ng
-* Python ≥ 3.5
-* Python package: `aioconsole`
-* Python package: `math3d`
-* Python package: `numpy`
+* Python ≥ 3.7
+* Python package: [aioconsole]
+* Python package: [math3d]
+* Python package: [numpy]
 
 On the local IP storage server:
 
-* Python ≥ 3.5
+* Python ≥ 3.7
 * A web server that supports CGI scripts
+
+Run `pip3 install -r requirements.txt` to install the Python packages.
+
+[aiohttp]: https://pypi.org/project/aiohttp
+[aioconsole]: https://pypi.org/project/aioconsole
+[math3d]: https://pypi.org/project/math3d
+[numpy]: https://pypi.org/project/numpy
 
 
 Setup
