@@ -1,5 +1,9 @@
-directions
-==========
+random-directions
+=================
+
+**random-directions** generates random, semi-coherent driving directions.
+They're not particularly *good* directions, and they don't exactly head towards
+a particular destination, but they're directions nonetheless.
 
 There are two main components to this system: the *navigator* and the *sensor
 client*. The navigator is the program that actually produces the directions.
@@ -93,5 +97,5 @@ is best to do so when none of these programs are running.
 License
 -------
 
-This repository is licensed under version 3 or later of the GNU Affero General
-Public License. See `LICENSE`.
+random-directions is licensed under version 3 or later of the GNU Affero
+General Public License. See `LICENSE`.
