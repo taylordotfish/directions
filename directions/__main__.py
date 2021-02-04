@@ -8,7 +8,7 @@ LOG_PATH = os.path.join(CACHE_DIR, "directions.log")
 
 
 def main():
-    with open(LOG_PATH, "a") as f:
+    with open(LOG_PATH, "a", encoding="utf8") as f:
         directions.set_log_file(f)
         try:
             directions.run()

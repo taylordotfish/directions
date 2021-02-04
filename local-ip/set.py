@@ -7,7 +7,7 @@ DEST = os.path.join(SCRIPT_DIR, "index.txt")
 
 
 def set_ip(ip):
-    with open(DEST, "w") as f:
+    with open(DEST, "w", encoding="utf8") as f:
         print(ip, file=f)
 
 

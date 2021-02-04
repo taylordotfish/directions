@@ -212,7 +212,7 @@ class Navigator:
     def load_target_direction(self):
         if RESUME:
             try:
-                with open(TARGET_DIRECTION_PATH) as f:
+                with open(TARGET_DIRECTION_PATH, encoding="utf8") as f:
                     direction = Vector(*map(float, f.read().split(",")))
                     self.target_direction = direction
                     return
@@ -224,7 +224,7 @@ class Navigator:
         angle = random.uniform(0, math.pi * 2)
         self.target_direction = Vector(math.cos(angle), math.sin(angle))
         log("Target direction: {}".format(self.target_direction))
-        with open(TARGET_DIRECTION_PATH, "w") as f:
+        with open(TARGET_DIRECTION_PATH, "w", encoding="utf8") as f:
             print(",".join(map(str, self.target_direction)), file=f)
 
     @property
