@@ -1,4 +1,4 @@
-aioconsole==0.3.1
-aiohttp==3.7.3
-math3d==3.3.5
-numpy==1.20.0
+aioconsole>=0.3.1,<0.4
+aiohttp>=3.7.3,<4
+math3d>=3.3.5,<4
+numpy>=1.20.0,<2

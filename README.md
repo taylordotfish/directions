@@ -43,7 +43,9 @@ On the local IP storage server:
 * Python ≥ 3.7
 * A web server that supports CGI scripts
 
-Run `pip3 install -r requirements.txt` to install the Python packages.
+Run `pip3 install -r requirements.txt` to install the Python packages. You can
+also use `requirements.freeze.txt` instead to install specific versions of the
+dependencies that have been verified to work.
 
 [aiohttp]: https://pypi.org/project/aiohttp
 [aioconsole]: https://pypi.org/project/aioconsole
