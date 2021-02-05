@@ -1,3 +1,9 @@
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and neighboring rights to this file to the public domain
+# worldwide. This software is distributed without any warranty. See
+# <http://creativecommons.org/publicdomain/zero/1.0/> for a copy of the
+# CC0 Public Domain Dedication.
+
 # URL that contains the local IP address of the directions server
 GET_IP_URL = "https://example.local/local-ip/"
 
